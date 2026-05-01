@@ -1,0 +1,15 @@
+<ivy-module version="2.0">
+  <info organisation="bundledModule" module="fleet.andel" revision="GO-261.22158.291" />
+  <configurations>
+    <conf name="default" visibility="public" />
+  </configurations>
+  <publications>
+    <artifact name="fleet.andel" ext="jar" conf="default" url="lib" />
+  </publications>
+  <dependencies>
+    <dependency org="bundledModule" name="fleet.bifurcan" rev="GO-261.22158.291" />
+    <dependency org="bundledModule" name="fleet.fastutil" rev="GO-261.22158.291" />
+    <dependency org="bundledModule" name="fleet.util.codepoints" rev="GO-261.22158.291" />
+    <dependency org="bundledModule" name="fleet.util.core" rev="GO-261.22158.291" />
+  </dependencies>
+</ivy-module>

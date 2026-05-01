@@ -1,0 +1,13 @@
+<idea-plugin>
+    <id>com.arkannsk.elval</id>
+    <name>ElVal Syntax Highlighter</name>
+    <vendor>arkannsk</vendor>
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <annotator language="go" implementationClass="com.arkannsk.elval.ElvalAnnotator"/>
+        <colorSettingsPage implementation="com.arkannsk.elval.ElvalColorSettingsPage"/>
+    </extensions>
+
+
+</idea-plugin>

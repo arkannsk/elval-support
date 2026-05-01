@@ -1,0 +1,24 @@
+<ivy-module version="2.0">
+  <info organisation="bundledModule" module="intellij.platform.util.ui" revision="GO-261.22158.291" />
+  <configurations>
+    <conf name="default" visibility="public" />
+  </configurations>
+  <publications>
+    <artifact name="intellij.platform.util.ui" ext="jar" conf="default" url="lib" />
+  </publications>
+  <dependencies>
+    <dependency org="bundledModule" name="intellij.libraries.aalto.xml" rev="GO-261.22158.291" />
+    <dependency org="bundledModule" name="intellij.libraries.caffeine" rev="GO-261.22158.291" />
+    <dependency org="bundledModule" name="intellij.libraries.fastutil" rev="GO-261.22158.291" />
+    <dependency org="bundledModule" name="intellij.libraries.hash4j" rev="GO-261.22158.291" />
+    <dependency org="bundledModule" name="intellij.libraries.imgscalr" rev="GO-261.22158.291" />
+    <dependency org="bundledModule" name="intellij.libraries.jbr" rev="GO-261.22158.291" />
+    <dependency org="bundledModule" name="intellij.libraries.jsvg" rev="GO-261.22158.291" />
+    <dependency org="bundledModule" name="intellij.libraries.kotlinx.coroutines.core" rev="GO-261.22158.291" />
+    <dependency org="bundledModule" name="intellij.libraries.kotlinx.serialization.core" rev="GO-261.22158.291" />
+    <dependency org="bundledModule" name="intellij.libraries.kotlinx.serialization.protobuf" rev="GO-261.22158.291" />
+    <dependency org="bundledModule" name="intellij.libraries.mvstore" rev="GO-261.22158.291" />
+    <dependency org="bundledModule" name="intellij.libraries.netty.buffer" rev="GO-261.22158.291" />
+    <dependency org="bundledModule" name="intellij.platform.util.ex" rev="GO-261.22158.291" />
+  </dependencies>
+</ivy-module>

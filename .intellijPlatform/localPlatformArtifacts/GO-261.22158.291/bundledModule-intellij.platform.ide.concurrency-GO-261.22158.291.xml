@@ -1,0 +1,17 @@
+<ivy-module version="2.0">
+  <info organisation="bundledModule" module="intellij.platform.ide.concurrency" revision="GO-261.22158.291" />
+  <configurations>
+    <conf name="default" visibility="public" />
+  </configurations>
+  <publications>
+    <artifact name="intellij.platform.ide.concurrency" ext="jar" conf="default" url="lib" />
+  </publications>
+  <dependencies>
+    <dependency org="bundledModule" name="intellij.libraries.caffeine" rev="GO-261.22158.291" />
+    <dependency org="bundledModule" name="intellij.libraries.guava" rev="GO-261.22158.291" />
+    <dependency org="bundledModule" name="intellij.libraries.kotlinx.coroutines.core" rev="GO-261.22158.291" />
+    <dependency org="bundledModule" name="intellij.platform.analysis.impl" rev="GO-261.22158.291" />
+    <dependency org="bundledModule" name="intellij.platform.core" rev="GO-261.22158.291" />
+    <dependency org="bundledModule" name="intellij.platform.core.impl" rev="GO-261.22158.291" />
+  </dependencies>
+</ivy-module>

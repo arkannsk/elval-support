@@ -1,0 +1,25 @@
+<ivy-module version="2.0">
+  <info organisation="bundledModule" module="intellij.platform.debugger.impl.shared" revision="GO-261.23567.143" />
+  <configurations>
+    <conf name="default" visibility="public" />
+  </configurations>
+  <publications>
+    <artifact name="intellij.platform.debugger.impl.shared" ext="jar" conf="default" url="lib" />
+  </publications>
+  <dependencies>
+    <dependency org="bundledModule" name="intellij.libraries.kotlinx.serialization.core" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.libraries.kotlinx.serialization.json" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.platform.analysis" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.platform.core" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.platform.core.impl" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.platform.core.ui" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.platform.debugger" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.platform.debugger.impl.rpc" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.platform.ide" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.platform.ide.impl" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.platform.kernel" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.platform.lang" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.platform.projectModel" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.platform.rpc.topics" rev="GO-261.23567.143" />
+  </dependencies>
+</ivy-module>

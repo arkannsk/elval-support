@@ -1,0 +1,16 @@
+<ivy-module version="2.0">
+  <info organisation="bundledModule" module="fleet.util.core" revision="GO-261.23567.143" />
+  <configurations>
+    <conf name="default" visibility="public" />
+  </configurations>
+  <publications>
+    <artifact name="fleet.util.core" ext="jar" conf="default" url="lib" />
+  </publications>
+  <dependencies>
+    <dependency org="bundledModule" name="fleet.multiplatform.shims" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="fleet.reporting.api" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="fleet.reporting.shared" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="fleet.util.logging.api" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="fleet.util.serialization" rev="GO-261.23567.143" />
+  </dependencies>
+</ivy-module>

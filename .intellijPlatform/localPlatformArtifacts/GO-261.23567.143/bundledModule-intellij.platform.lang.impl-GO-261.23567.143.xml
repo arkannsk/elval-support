@@ -1,0 +1,56 @@
+<ivy-module version="2.0">
+  <info organisation="bundledModule" module="intellij.platform.lang.impl" revision="GO-261.23567.143" />
+  <configurations>
+    <conf name="default" visibility="public" />
+  </configurations>
+  <publications>
+    <artifact name="intellij.platform.lang.impl" ext="jar" conf="default" url="lib" />
+  </publications>
+  <dependencies>
+    <dependency org="bundledModule" name="intellij.libraries.caffeine" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.libraries.cli.parser" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.libraries.commons.lang3" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.libraries.commons.logging" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.libraries.fastutil" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.libraries.gson" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.libraries.guava" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.libraries.hash4j" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.libraries.jackson" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.libraries.jackson.databind" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.libraries.jackson.module.kotlin" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.libraries.jsoup" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.libraries.kotlinx.collections.immutable" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.libraries.kotlinx.coroutines.core" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.libraries.kotlinx.html" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.libraries.kotlinx.serialization.core" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.libraries.kotlinx.serialization.json" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.libraries.kotlinx.serialization.protobuf" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.libraries.lz4" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.libraries.miglayout.swing" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.libraries.oro.matcher" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.libraries.pty4j" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.libraries.rd.core" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.libraries.rd.swing" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.libraries.stream" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.libraries.swingx" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.libraries.velocity" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.libraries.xstream" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.libraries.xz" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.platform.analysis" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.platform.analysis.impl" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.platform.builtInServer" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.platform.core" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.platform.core.impl" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.platform.core.ui" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.platform.diff" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.platform.diff.impl" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.platform.ide.concurrency" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.platform.ide.impl" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.platform.kernel" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.platform.lang" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.platform.lang.core" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.platform.projectModel" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.platform.projectModel.impl" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.platform.welcomeScreen.impl" rev="GO-261.23567.143" />
+  </dependencies>
+</ivy-module>

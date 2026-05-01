@@ -1,0 +1,13 @@
+<ivy-module version="2.0">
+  <info organisation="bundledModule" module="intellij.platform.locking.impl" revision="GO-261.23567.143" />
+  <configurations>
+    <conf name="default" visibility="public" />
+  </configurations>
+  <publications>
+    <artifact name="intellij.platform.locking.impl" ext="jar" conf="default" url="lib" />
+  </publications>
+  <dependencies>
+    <dependency org="bundledModule" name="intellij.libraries.kotlinx.coroutines.core" rev="GO-261.23567.143" />
+    <dependency org="bundledModule" name="intellij.platform.core" rev="GO-261.23567.143" />
+  </dependencies>
+</ivy-module>

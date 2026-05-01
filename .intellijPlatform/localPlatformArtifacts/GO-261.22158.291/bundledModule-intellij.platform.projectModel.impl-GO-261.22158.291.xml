@@ -1,0 +1,21 @@
+<ivy-module version="2.0">
+  <info organisation="bundledModule" module="intellij.platform.projectModel.impl" revision="GO-261.22158.291" />
+  <configurations>
+    <conf name="default" visibility="public" />
+  </configurations>
+  <publications>
+    <artifact name="intellij.platform.projectModel.impl" ext="jar" conf="default" url="lib" />
+  </publications>
+  <dependencies>
+    <dependency org="bundledModule" name="intellij.libraries.fastutil" rev="GO-261.22158.291" />
+    <dependency org="bundledModule" name="intellij.libraries.guava" rev="GO-261.22158.291" />
+    <dependency org="bundledModule" name="intellij.libraries.hash4j" rev="GO-261.22158.291" />
+    <dependency org="bundledModule" name="intellij.libraries.kotlinx.coroutines.core" rev="GO-261.22158.291" />
+    <dependency org="bundledModule" name="intellij.libraries.kryo5" rev="GO-261.22158.291" />
+    <dependency org="bundledModule" name="intellij.platform.analysis" rev="GO-261.22158.291" />
+    <dependency org="bundledModule" name="intellij.platform.core" rev="GO-261.22158.291" />
+    <dependency org="bundledModule" name="intellij.platform.core.impl" rev="GO-261.22158.291" />
+    <dependency org="bundledModule" name="intellij.platform.projectModel" rev="GO-261.22158.291" />
+    <dependency org="bundledModule" name="intellij.platform.util.ex" rev="GO-261.22158.291" />
+  </dependencies>
+</ivy-module>
