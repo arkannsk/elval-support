@@ -29,6 +29,6 @@
         <colorSettingsPage implementation="com.arkannsk.elval.ElvalColorSettingsPage"/>
 
         <!-- Автодополнение -->
-        <completion.contributor language="go" implementationClass="com.arkannsk.elval.ElvalCompletionContributor"/>
+        <completion.contributor language="go" implementationClass="com.arkannsk.elval.completion.ElvalCompletionContributor"/>
     </extensions>
 </idea-plugin>
