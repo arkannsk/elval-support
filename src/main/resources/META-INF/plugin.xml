@@ -7,7 +7,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <annotator language="go" implementationClass="com.arkannsk.elval.ElvalAnnotator"/>
         <colorSettingsPage implementation="com.arkannsk.elval.ElvalColorSettingsPage"/>
+        <completion.contributor language="go" implementationClass="com.arkannsk.elval.ElvalCompletionContributor"/>
     </extensions>
-
 
 </idea-plugin>
