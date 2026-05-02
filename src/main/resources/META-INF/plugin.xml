@@ -1,13 +1,34 @@
 <idea-plugin>
+    <!-- Уникальный ID плагина -->
     <id>com.arkannsk.elval</id>
-    <name>ElVal Syntax Highlighter</name>
-    <vendor>arkannsk</vendor>
+
+    <!-- Название, которое видит пользователь -->
+    <name>ElVal Helper</name>
+
+    <!-- Версия плагина (должна совпадать с version в build.gradle.kts) -->
+    <version>1.0.0</version>
+
+    <!-- Автор или компания -->
+    <vendor url="https://github.com/arkannsk">arkannsk</vendor>
+
+    <!-- Описание плагина -->
+    <description><![CDATA[
+        Syntax highlighting and completion for ElVal annotations in Go files.
+        Supports @evl:validate, @evl:decor, @oa:tags and more.
+    ]]></description>
+
+    <!-- Зависимости -->
+    <!-- Базовая платформа IntelliJ -->
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
+        <!-- Подсветка синтаксиса -->
         <annotator language="go" implementationClass="com.arkannsk.elval.ElvalAnnotator"/>
+
+        <!-- Настройки цветов -->
         <colorSettingsPage implementation="com.arkannsk.elval.ElvalColorSettingsPage"/>
+
+        <!-- Автодополнение -->
+        <completion.contributor language="go" implementationClass="com.arkannsk.elval.ElvalCompletionContributor"/>
     </extensions>
-
-
 </idea-plugin>
