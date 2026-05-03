@@ -1,4 +1,4 @@
-package com.arkannsk.elval.completion
+package com.arkannsk.elval.util
 
 import com.intellij.codeInsight.completion.InsertHandler
 import com.intellij.codeInsight.completion.InsertionContext
