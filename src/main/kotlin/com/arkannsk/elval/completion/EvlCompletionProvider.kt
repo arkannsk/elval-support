@@ -2,8 +2,7 @@ package com.arkannsk.elval.completion
 
 import com.arkannsk.elval.ElvalConstants
 import com.intellij.codeInsight.completion.*
-import com.intellij.codeInsight.lookup.LookupElementBuilder
-import com.intellij.icons.AllIcons
+import com.arkannsk.elval.util.CompletionUtils
 
 data class CompletionItem(
     val insertText: String,
@@ -24,18 +23,21 @@ object EvlCompletionProvider {
 
         val matchedDirective = ElvalConstants.EVL_DIRECTIVES.firstOrNull { trimmedContext.startsWith(it) }
 
-        when (matchedDirective) {
+        return when (matchedDirective) {
             "validate" -> {
-                return handleDirectiveParams(fullContext, "validate", ElvalConstants.VALIDATE_PARAMS)
+                handleDirectiveParams(fullContext, "validate", ElvalConstants.VALIDATE_PARAMS)
             }
+
             "decor" -> {
-                return handleDirectiveParams(fullContext, "decor", ElvalConstants.DECOR_PARAMS)
+                handleDirectiveParams(fullContext, "decor", ElvalConstants.DECOR_PARAMS)
             }
+
             "rewrite" -> {
-                return handleDirectiveParams(fullContext, "rewrite", ElvalConstants.REWRITE_PARAMS)
+                handleDirectiveParams(fullContext, "rewrite", ElvalConstants.REWRITE_PARAMS)
             }
+
             else -> {
-                return ElvalConstants.EVL_DIRECTIVES.filter { it.startsWith(trimmedContext) }
+                ElvalConstants.EVL_DIRECTIVES.filter { it.startsWith(trimmedContext) }
             }
         }
     }
@@ -137,17 +139,15 @@ object EvlCompletionProvider {
         for (item in items) {
             val actualStartOffset = absoluteContextStartOffset + item.startOffsetDelta
 
-            var builder = LookupElementBuilder.create(item.insertText)
-                .withLookupString(item.lookupString)
-                .bold()
-                .withInsertHandler(SimpleReplaceHandler(actualStartOffset, item.insertText))
-                .withIcon(AllIcons.Nodes.Parameter)
+            // Просто используй val, тип выведется автоматически как LookupElement
+            val element = CompletionUtils.createPrioritizedElement(
+                lookupString = item.lookupString,
+                insertText = item.insertText,
+                startOffset = actualStartOffset,
+                hint = item.hint
+            )
 
-            if (!item.hint.isNullOrEmpty()) {
-                builder = builder.withTailText(" (${item.hint})", true)
-            }
-
-            result.addElement(builder)
+            result.addElement(element)
         }
     }
 }

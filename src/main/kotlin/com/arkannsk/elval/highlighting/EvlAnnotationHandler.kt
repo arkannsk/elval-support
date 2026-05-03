@@ -4,7 +4,6 @@ import com.intellij.lang.annotation.AnnotationHolder
 
 object EvlAnnotationHandler {
 
-    // Простые параметры (без значений)
     private val SIMPLE_PARAMS = setOf(
         "required", "optional", "not-zero",
         "email", "uuid", "phone", "ip", "url", "http_url", "dsn",
@@ -13,8 +12,6 @@ object EvlAnnotationHandler {
         "time-now", "uuid-gen"
     )
 
-    // Regex для KV-параметров (ключ:значение)
-    // Поддерживает: min:, max:, len:, gt:, lt:, gte:, lte:, eq:, neq:, pattern:, enum:, contains:, starts_with:, ends_with:, ctx-get:, httpctx-get:, env-get:, default:, prefix:, suffix:, ref:, type:
     private val KV_PARAM_PREFIXES = listOf(
         "min", "max", "len",
         "gt", "lt", "gte", "lte", "eq", "neq",
@@ -33,51 +30,67 @@ object EvlAnnotationHandler {
         val len = text.length
 
         while (i < len) {
+            // Пропускаем пробелы и слеши комментариев
             if (text[i].isWhitespace() || text[i] == '/') {
                 i++
                 continue
             }
 
+            // Проверяем начало директивы @evl:
             if (text.substring(i).startsWith("@evl:")) {
                 val directiveEnd = findWordEnd(text, i + 5)
                 val directiveName = text.substring(i + 5, directiveEnd)
 
-                // Подсвечиваем директиву
+                // Подсвечиваем саму директиву (@evl:validate)
                 ElvalHighlighter.highlightKeyword(holder, baseOffset + i, baseOffset + directiveEnd)
 
                 i = directiveEnd
 
+                // Если это декоратор, обрабатываем его значение отдельно и завершаем обработку этой директивы
                 if (directiveName == "decor") {
                     handleDecorValue(text, i, baseOffset, holder)
+                    // После обработки значения декоратора, i уже стоит в конце значения.
+                    // Цикл продолжится, но так как дальше обычно идет конец строки или новая аннотация, это ок.
                     continue
                 }
 
-                // Обработка параметров validate/rewrite
-                skipWhitespace(text, i).let { paramStart ->
-                    if (paramStart < len && text[paramStart] != '\n' && text[paramStart] != '\r') {
-                        val paramEnd = findWordEnd(text, paramStart)
-                        val paramName = text.substring(paramStart, paramEnd)
+                // Найдем конец текущей строки комментария
+                val endOfLine = text.indexOfAny(charArrayOf('\n', '\r'), i)
+                val lineEnd = if (endOfLine == -1) len else endOfLine
 
-                        if (SIMPLE_PARAMS.contains(paramName)) {
-                            // Простой параметр (required, email...)
-                            ElvalHighlighter.highlightFunctionCall(holder, baseOffset + paramStart, baseOffset + paramEnd)
-                        } else if (isKvParam(paramName)) {
-                            // KV-параметр (min:10, pattern:email...)
-                            val colonIndex = paramName.indexOf(':')
-                            if (colonIndex > 0) {
-                                // Имя параметра (min:)
-                                ElvalHighlighter.highlightFunctionCall(holder, baseOffset + paramStart, baseOffset + paramStart + colonIndex + 1)
-                                // Значение (10, email...)
-                                if (colonIndex + 1 < paramName.length) {
-                                    ElvalHighlighter.highlightString(holder, baseOffset + paramStart + colonIndex + 1, baseOffset + paramEnd)
-                                }
+                // Парсим параметры от i до lineEnd
+                var paramCursor = i
+                while (paramCursor < lineEnd) {
+                    // Пропускаем пробелы
+                    while (paramCursor < lineEnd && text[paramCursor].isWhitespace()) {
+                        paramCursor++
+                    }
+                    if (paramCursor >= lineEnd) break
+
+                    val wordStart = paramCursor
+                    val wordEnd = findWordEnd(text, paramCursor)
+                    val word = text.substring(wordStart, wordEnd)
+
+                    if (SIMPLE_PARAMS.contains(word)) {
+                        ElvalHighlighter.highlightFunctionCall(holder, baseOffset + wordStart, baseOffset + wordEnd)
+                    } else if (isKvParam(word)) {
+                        val colonIndex = word.indexOf(':')
+                        if (colonIndex > 0) {
+                            ElvalHighlighter.highlightFunctionCall(holder, baseOffset + wordStart, baseOffset + wordStart + colonIndex + 1)
+                            if (colonIndex + 1 < word.length) {
+                                ElvalHighlighter.highlightString(holder, baseOffset + wordStart + colonIndex + 1, baseOffset + wordEnd)
                             }
                         }
-                        i = paramEnd
                     }
+
+                    paramCursor = wordEnd
                 }
+
+                // Перемещаем основной указатель i в конец строки, чтобы не обрабатывать эту строку повторно
+                i = lineEnd
                 continue
             }
+
             i++
         }
     }

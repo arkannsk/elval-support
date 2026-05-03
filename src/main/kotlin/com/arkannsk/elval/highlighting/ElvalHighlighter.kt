@@ -2,7 +2,6 @@ package com.arkannsk.elval.highlighting
 
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.HighlightSeverity
-import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.openapi.util.TextRange
 
 object ElvalHighlighter {
@@ -11,23 +10,7 @@ object ElvalHighlighter {
         if (start >= end) return
         holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
             .range(TextRange(start, end))
-            .textAttributes(DefaultLanguageHighlighterColors.KEYWORD)
-            .create()
-    }
-
-    fun highlightMetadata(holder: AnnotationHolder, start: Int, end: Int) {
-        if (start >= end) return
-        holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
-            .range(TextRange(start, end))
-            .textAttributes(DefaultLanguageHighlighterColors.METADATA)
-            .create()
-    }
-
-    fun highlightString(holder: AnnotationHolder, start: Int, end: Int) {
-        if (start >= end) return
-        holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
-            .range(TextRange(start, end))
-            .textAttributes(DefaultLanguageHighlighterColors.STRING)
+            .textAttributes(ElvalColorSettingsPage.ELVAL_KEYWORD)
             .create()
     }
 
@@ -35,7 +18,23 @@ object ElvalHighlighter {
         if (start >= end) return
         holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
             .range(TextRange(start, end))
-            .textAttributes(DefaultLanguageHighlighterColors.FUNCTION_CALL)
+            .textAttributes(ElvalColorSettingsPage.ELVAL_PARAM_NAME)
+            .create()
+    }
+
+    fun highlightString(holder: AnnotationHolder, start: Int, end: Int) {
+        if (start >= end) return
+        holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
+            .range(TextRange(start, end))
+            .textAttributes(ElvalColorSettingsPage.ELVAL_PARAM_VALUE)
+            .create()
+    }
+
+    fun highlightMetadata(holder: AnnotationHolder, start: Int, end: Int) {
+        if (start >= end) return
+        holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
+            .range(TextRange(start, end))
+            .textAttributes(ElvalColorSettingsPage.OA_ANNOTATION)
             .create()
     }
 }

@@ -1,9 +1,11 @@
 package com.arkannsk.elval.completion
 
 import com.arkannsk.elval.ElvalConstants
+import com.arkannsk.elval.util.SimpleReplaceHandler
 import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.icons.AllIcons
+import com.arkannsk.elval.util.CompletionUtils
 
 object OaCompletionProvider {
 
@@ -65,24 +67,18 @@ object OaCompletionProvider {
             val startOffsetDelta = if (lastSpaceIndex != -1) lastSpaceIndex + 1 else 0
 
             val actualStartOffset = absoluteContextStartOffset + startOffsetDelta
+            val hint = if (isInValueContext) "Location for parameter" else ElvalConstants.OA_KEYS[s]
 
-            val hint = if (isInValueContext) {
-                "Location for parameter"
-            } else {
-                ElvalConstants.OA_KEYS[s]
-            }
+            // Используем утилиту, тип выводится автоматически
+            val element = CompletionUtils.createPrioritizedElement(
+                lookupString = s,
+                insertText = insertText,
+                startOffset = actualStartOffset,
+                hint = hint,
+                icon = AllIcons.Nodes.Property
+            )
 
-            var builder = LookupElementBuilder.create(insertText)
-                .withLookupString(s)
-                .bold()
-                .withInsertHandler(SimpleReplaceHandler(actualStartOffset, insertText))
-                .withIcon(AllIcons.Nodes.Property)
-
-            if (!hint.isNullOrEmpty()) {
-                builder = builder.withTailText(" ($hint)", true)
-            }
-
-            result.addElement(builder)
+            result.addElement(element)
         }
     }
 }
