@@ -29,7 +29,7 @@ object ElvalConstants {
         "email" to "Must be valid email",
         "url" to "Must be valid URL",
         "uuid" to "Must be valid UUID",
-        "phone" to "Must be valid phone number", // Добавил, так как есть в примере pattern:phone
+        "phone" to "Must be valid phone number",
 
         // Enums
         "enum:" to "List of allowed values (comma-separated)",
@@ -48,7 +48,7 @@ object ElvalConstants {
         "uuid-gen" to "Generate UUID v4"
     )
 
-    // --- REWRITE PARAMS (если понадобятся) ---
+    // --- REWRITE PARAMS
     val REWRITE_PARAMS = mapOf(
         "type:" to "Rewrite type for OpenAPI docs (string, integer, etc.)"
     )
@@ -70,6 +70,5 @@ object ElvalConstants {
         "rewrite.type" to "Override type for OpenAPI docs"
     )
 
-    // Возможные значения для @oa:in
     val OA_IN_VALUES = listOf("path", "query", "header", "cookie")
 }

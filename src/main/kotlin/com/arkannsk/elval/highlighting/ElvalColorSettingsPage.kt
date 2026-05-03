@@ -1,4 +1,4 @@
-package com.arkannsk.elval
+package com.arkannsk.elval.highlighting
 
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.openapi.editor.colors.TextAttributesKey
