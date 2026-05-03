@@ -15,36 +15,6 @@ import javax.swing.Icon
 
 class ElvalColorSettingsPage : ColorSettingsPage {
 
-    companion object {
-        // Создаем свои ключи атрибутов на основе стандартных цветов
-        val ELVAL_KEYWORD = TextAttributesKey.createTextAttributesKey(
-            "ELVAL_KEYWORD",
-            DefaultLanguageHighlighterColors.KEYWORD
-        )
-
-        val ELVAL_PARAM_NAME = TextAttributesKey.createTextAttributesKey(
-            "ELVAL_PARAM_NAME",
-            DefaultLanguageHighlighterColors.NUMBER // Или FUNCTION_CALL, если нравится больше
-        )
-
-        val ELVAL_PARAM_VALUE = TextAttributesKey.createTextAttributesKey(
-            "ELVAL_PARAM_VALUE",
-            DefaultLanguageHighlighterColors.STRING
-        )
-
-        val OA_ANNOTATION = TextAttributesKey.createTextAttributesKey(
-            "OA_ANNOTATION",
-            DefaultLanguageHighlighterColors.METADATA
-        )
-
-        private val DESCRIPTORS = arrayOf(
-            AttributesDescriptor("ElVal - Keyword (@evl:validate, @evl:decor)", ELVAL_KEYWORD),
-            AttributesDescriptor("ElVal - Parameter Name (min, max, pattern)", ELVAL_PARAM_NAME),
-            AttributesDescriptor("ElVal - Parameter Value (required, 10, email)", ELVAL_PARAM_VALUE),
-            AttributesDescriptor("OpenAPI Annotation (@oa:title, @oa:description)", OA_ANNOTATION),
-        )
-    }
-
     override fun getDisplayName(): String = "ElVal Annotations"
 
     override fun getIcon(): Icon? = null
@@ -97,3 +67,31 @@ class ElvalColorSettingsPage : ColorSettingsPage {
         )
     }
 }
+
+// Создаем свои ключи атрибутов на основе стандартных цветов
+val ELVAL_KEYWORD = TextAttributesKey.createTextAttributesKey(
+    "ELVAL_KEYWORD",
+    DefaultLanguageHighlighterColors.KEYWORD
+)
+
+val ELVAL_PARAM_NAME = TextAttributesKey.createTextAttributesKey(
+    "ELVAL_PARAM_NAME",
+    DefaultLanguageHighlighterColors.NUMBER
+)
+
+val ELVAL_PARAM_VALUE = TextAttributesKey.createTextAttributesKey(
+    "ELVAL_PARAM_VALUE",
+    DefaultLanguageHighlighterColors.STRING
+)
+
+val OA_ANNOTATION = TextAttributesKey.createTextAttributesKey(
+    "OA_ANNOTATION",
+    DefaultLanguageHighlighterColors.METADATA
+)
+
+private val DESCRIPTORS = arrayOf(
+    AttributesDescriptor("ElVal - Keyword (@evl:validate, @evl:decor)", ELVAL_KEYWORD),
+    AttributesDescriptor("ElVal - Parameter Name (min, max, pattern)", ELVAL_PARAM_NAME),
+    AttributesDescriptor("ElVal - Parameter Value (required, 10, email)", ELVAL_PARAM_VALUE),
+    AttributesDescriptor("OpenAPI Annotation (@oa:title, @oa:description)", OA_ANNOTATION),
+)
