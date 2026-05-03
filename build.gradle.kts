@@ -1,15 +1,10 @@
 group = "com.arkannsk"
 version = "1.0.0"
-java.sourceCompatibility = JavaVersion.VERSION_17
 
 plugins {
     id("java")
     id("org.jetbrains.kotlin.jvm") version "2.3.21"
     id("org.jetbrains.intellij.platform") version "2.11.0"
-}
-
-kotlin {
-    jvmToolchain(17)
 }
 
 repositories {
