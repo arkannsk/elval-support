@@ -1,11 +1,11 @@
-plugins {
-    id("java")
-    id("org.jetbrains.kotlin.jvm") version "2.3.0"
-    id("org.jetbrains.intellij.platform") version "2.11.0"
-}
-
 group = "com.arkannsk"
 version = "1.0.0"
+
+plugins {
+    id("java")
+    id("org.jetbrains.kotlin.jvm") version "2.3.21"
+    id("org.jetbrains.intellij.platform") version "2.11.0"
+}
 
 repositories {
     mavenCentral()
@@ -20,6 +20,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
+    testImplementation(kotlin("test"))
 
     intellijPlatform {
         goland("2026.1")
@@ -31,10 +32,15 @@ intellijPlatform {
 
     pluginConfiguration {
         ideaVersion {
-            sinceBuild = "243"
-            untilBuild = "251.*"
+            sinceBuild = "261"
+            untilBuild = "261.*"
         }
     }
+}
+
+
+tasks.test {
+    useJUnitPlatform() // Required to run JUnit 5 tests
 }
 
 tasks {

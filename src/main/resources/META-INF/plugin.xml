@@ -23,12 +23,12 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Подсветка синтаксиса -->
-        <annotator language="go" implementationClass="com.arkannsk.elval.ElvalAnnotator"/>
+        <annotator language="go" implementationClass="com.arkannsk.elval.highlighting.ElvalAnnotator"/>
 
         <!-- Настройки цветов -->
-        <colorSettingsPage implementation="com.arkannsk.elval.ElvalColorSettingsPage"/>
+        <colorSettingsPage implementation="com.arkannsk.elval.highlighting.ElvalColorSettingsPage"/>
 
         <!-- Автодополнение -->
-        <completion.contributor language="go" implementationClass="com.arkannsk.elval.ElvalCompletionContributor"/>
+        <completion.contributor language="go" implementationClass="com.arkannsk.elval.completion.ElvalCompletionContributor"/>
     </extensions>
 </idea-plugin>
