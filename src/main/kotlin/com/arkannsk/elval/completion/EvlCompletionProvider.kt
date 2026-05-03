@@ -2,129 +2,137 @@ package com.arkannsk.elval.completion
 
 import com.arkannsk.elval.ElvalConstants
 import com.intellij.codeInsight.completion.*
-import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
+import com.intellij.icons.AllIcons
+
+data class CompletionItem(
+    val insertText: String,
+    val lookupString: String,
+    val startOffsetDelta: Int,
+    val hint: String? = null
+)
 
 object EvlCompletionProvider {
 
-    fun fillCompletions(
-        result: CompletionResultSet,
-        prefixEndIndex: Int,
-        cursorOffset: Int,
-        rawContext: String
-    ) {
-        val trimmedContext = rawContext.trim()
-
-        // Проверяем, начинается ли контекст с известной директивы
-        val matchedDirective = ElvalConstants.EVL_DIRECTIVES.firstOrNull { directive ->
-            trimmedContext.startsWith(directive)
-        }
-
-        if (matchedDirective != null) {
-            // Директива найдена (например, "validate"). Предлагаем параметры.
-            // Вычисляем, что написано после директивы
-            val afterDirective = trimmedContext.substring(matchedDirective.length).trimStart()
-
-            handleEvParams(result, cursorOffset, afterDirective, matchedDirective)
-        } else {
-            // Директива не распознана или неполная. Предлагаем список директив.
-            for (directive in ElvalConstants.EVL_DIRECTIVES) {
-                if (directive.startsWith(trimmedContext)) {
-                    val insertText = "$directive "
-                    val startOffset = cursorOffset - trimmedContext.length
-                    result.addElement(LookupElementBuilder.create(insertText)
-                        .withLookupString(directive)
-                        .withTailText(" (ElVal)")
-                        .bold()
-                        .withInsertHandler(SimpleReplaceHandler(startOffset, insertText)))
-                }
-            }
-        }
-    }
-
-    private fun handleEvParams(
-        result: CompletionResultSet,
-        cursorOffset: Int,
-        paramsPart: String,
-        directive: String
-    ) {
-        // Пока поддерживаем параметры только для validate
-        if (directive == "validate") {
-            for ((param, hint) in ElvalConstants.VALIDATE_PARAMS) {
-                if (param.startsWith(paramsPart)) {
-                    val insertText = if (param.endsWith(":") || param == "required") param else "$param "
-                    val startOffset = cursorOffset - paramsPart.length
-
-                    result.addElement(LookupElementBuilder.create(insertText)
-                        .withLookupString(param)
-                        .withTailText(" ($hint)")
-                        .bold()
-                        .withInsertHandler(SimpleReplaceHandler(startOffset, insertText)))
-                }
-            }
-        }
-        // Для decor и rewrite можно добавить аналогичную логику в будущем
-    }
-
-    // Функция для получения списка подсказок на основе контекста (для тестов и использования в Contributor)
     fun getSuggestions(rawContext: String): List<String> {
-        val trimmedContext = rawContext.trim()
-        val suggestions = mutableListOf<String>()
+        val fullContext = rawContext
+        val trimmedContext = fullContext.trim()
 
         if (trimmedContext.isEmpty()) {
-            // Если пусто, предлагаем все директивы
             return ElvalConstants.EVL_DIRECTIVES.toList()
         }
 
-        // Проверяем, начинается ли контекст с известной директивы (например, "validate ...")
-        val matchedDirective = ElvalConstants.EVL_DIRECTIVES.firstOrNull { directive ->
-            trimmedContext.startsWith(directive)
+        val matchedDirective = ElvalConstants.EVL_DIRECTIVES.firstOrNull { trimmedContext.startsWith(it) }
+
+        if (matchedDirective == "validate") {
+            val directiveEndIndex = fullContext.indexOf("validate") + "validate".length
+            val afterDirectiveRaw = if (directiveEndIndex < fullContext.length) {
+                fullContext.substring(directiveEndIndex)
+            } else {
+                ""
+            }
+
+            val endsWithSeparator = afterDirectiveRaw.endsWith(" ") || afterDirectiveRaw.endsWith(",")
+
+            // Разбиваем на слова
+            val words = afterDirectiveRaw.trim().split(Regex("[\\s,]+")).filter { it.isNotEmpty() }
+
+            // Текущее вводимое слово
+            val currentWord = if (endsWithSeparator) "" else words.lastOrNull() ?: ""
+
+            // ВАЖНОЕ ИЗМЕНЕНИЕ:
+            // Если есть уже введенные параметры (кроме текущего слова) И текущее слово пустое или полностью совпадает с существующим,
+            // то не предлагаем новые параметры — пользователь должен создать новую строку.
+            val hasOtherParams = words.size > 1 || (words.size == 1 && words[0] != currentWord)
+
+            if (hasOtherParams && (currentWord.isEmpty() || ElvalConstants.VALIDATE_PARAMS.keys.contains(currentWord))) {
+                // Не предлагаем ничего, кроме возможного завершения текущего слова
+                if (currentWord.isNotEmpty()) {
+                    return ElvalConstants.VALIDATE_PARAMS.keys.filter { it.startsWith(currentWord) }
+                } else {
+                    return emptyList()
+                }
+            }
+
+            // Иначе предлагаем параметры, которые начинаются на currentWord и не являются дубликатами
+            return ElvalConstants.VALIDATE_PARAMS.keys.filter { param ->
+                param.startsWith(currentWord) &&
+                        (currentWord.isNotEmpty() || !words.contains(param))
+            }
         }
 
-        if (matchedDirective != null) {
-            // Директива найдена. Предлагаем параметры.
-            val afterDirective = trimmedContext.substring(matchedDirective.length).trimStart()
-
-            if (matchedDirective == "validate") {
-                for ((param, _) in ElvalConstants.VALIDATE_PARAMS) {
-                    if (param.startsWith(afterDirective)) {
-                        suggestions.add(param)
-                    }
-                }
-            } else if (matchedDirective == "decor") {
-                // TODO: Добавить параметры для decor в будущем
-            } else if (matchedDirective == "rewrite") {
-                // TODO: Добавить параметры для rewrite в будущем
-            }
-        } else {
-            // Директива не распознана полностью.
-            // Проверяем, является ли trimmedContext ПРЕФИКСОМ какой-либо директивы.
-            // Например, "ev" является префиксом для "validate"? Нет.
-            // "val" является префиксом для "validate"? Да.
-            // "dec" является префиксом для "decor"? Да.
-
-            for (directive in ElvalConstants.EVL_DIRECTIVES) {
-                if (directive.startsWith(trimmedContext)) {
-                    suggestions.add(directive)
-                }
-            }
-        }
-
-        return suggestions
+        return ElvalConstants.EVL_DIRECTIVES.filter { it.startsWith(trimmedContext) }
     }
 
-    internal class SimpleReplaceHandler(private val startOffset: Int, private val replacementText: String) :
-        InsertHandler<LookupElement> {
+    fun getCompletionItems(rawContext: String): List<CompletionItem> {
+        val suggestions = getSuggestions(rawContext)
+        val trimmed = rawContext.trim()
 
-        override fun handleInsert(context: InsertionContext, item: LookupElement) {
-            val editor = context.editor
-            val currentCaretOffset = editor.caretModel.offset
+        // Проверяем, является ли ввод незавершенной директивой (например, "val")
+        val isPartialDirectiveInput = ElvalConstants.EVL_DIRECTIVES.any {
+            it.startsWith(trimmed) && it != trimmed
+        }
 
-            if (startOffset < 0 || startOffset > editor.document.textLength) return
+        val items = mutableListOf<CompletionItem>()
 
-            editor.document.deleteString(startOffset, currentCaretOffset)
-            editor.document.insertString(startOffset, replacementText)
-            editor.caretModel.moveToOffset(startOffset + replacementText.length)
+        for (s in suggestions) {
+            // Формируем текст вставки
+            // Для параметров с двоеточием (min:) или ключевых слов (required) пробел в конце не обязателен,
+            // но для удобства автодополнения часто добавляют пробел, если это не конец строки.
+            // В твоем примере параметры стоят в конце строки комментария, поэтому пробел может быть лишним,
+            // но если пользователь хочет добавить еще что-то, пробел нужен.
+            // Давай добавлять пробел только если это не параметр со значением (типа min:10),
+            // но так как мы предлагаем только ключи (min:), пробел полезен.
+
+            var insertText = s
+
+            // Если это простой параметр без значения (required, email, url), добавим пробел в конце,
+            // чтобы пользователь мог сразу начать писать следующую аннотацию или закрыть комментарий
+            if (!s.endsWith(":")) {
+                insertText += " "
+            }
+
+            // Рассчитываем смещение начала замены
+            var startOffsetDelta = 0
+
+            if (!isPartialDirectiveInput) {
+                // Ищем последний пробел в исходном контексте, чтобы заменить только текущее слово
+                val lastSpaceIndex = rawContext.lastIndexOf(' ')
+
+                if (lastSpaceIndex != -1) {
+                    startOffsetDelta = lastSpaceIndex + 1
+                }
+            }
+
+            val hint = ElvalConstants.VALIDATE_PARAMS[s]
+            items.add(CompletionItem(insertText, s, startOffsetDelta, hint))
+        }
+
+        return items
+    }
+
+    fun fillCompletions(
+        result: CompletionResultSet,
+        absoluteContextStartOffset: Int,
+        cursorOffset: Int,
+        rawContext: String
+    ) {
+        val items = getCompletionItems(rawContext)
+
+        for (item in items) {
+            val actualStartOffset = absoluteContextStartOffset + item.startOffsetDelta
+
+            var builder = LookupElementBuilder.create(item.insertText)
+                .withLookupString(item.lookupString)
+                .bold()
+                .withInsertHandler(SimpleReplaceHandler(actualStartOffset, item.insertText))
+                .withIcon(AllIcons.Nodes.Parameter)
+
+            if (!item.hint.isNullOrEmpty()) {
+                builder = builder.withTailText(" (${item.hint})", true)
+            }
+
+            result.addElement(builder)
         }
     }
 }

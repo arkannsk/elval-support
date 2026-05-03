@@ -23,18 +23,20 @@ class ElvalCompletionContributor : CompletionContributor() {
 
         // 1. Проверка на базовый триггер @
         val lastAtIndex = textBeforeCursor.lastIndexOf('@')
-        if (lastAtIndex == -1) return
+        if (lastAtIndex == -1) {
+            return
+        }
 
         val textAfterAt = textBeforeCursor.substring(lastAtIndex + 1)
 
-        // УЛУЧШЕНИЕ: Проверяем, начинается ли текст после @ с evl, oa ИЛИ является их префиксом (e, ev, o)
         val isEvPrefix = textAfterAt.startsWith("evl") || "evl".startsWith(textAfterAt)
         val isOaPrefix = textAfterAt.startsWith("oa") || "oa".startsWith(textAfterAt)
 
-        // Если после @ есть другие символы, которые не относятся к evl/oa (например, пробел или буква x), то выходим
         val isValidContext = textAfterAt.isEmpty() || isEvPrefix || isOaPrefix
 
-        if (!isValidContext) return
+        if (!isValidContext) {
+            return
+        }
 
         var prefixEndIndex = -1
         var currentContext = ""
@@ -45,7 +47,6 @@ class ElvalCompletionContributor : CompletionContributor() {
                 prefixEndIndex = evlIndex + "@evl:".length
                 currentContext = textBeforeCursor.substring(prefixEndIndex)
             } else {
-                // Если написали @ev или @e, но еще нет двоеточия
                 prefixEndIndex = lastAtIndex + 1
                 currentContext = textAfterAt
             }
@@ -62,9 +63,7 @@ class ElvalCompletionContributor : CompletionContributor() {
 
         // Случай 1: Просто @ или частичный ввод (@e, @ev, @o)
         if (prefixEndIndex == -1 || !textBeforeCursor.contains(":")) {
-            // Если двоеточия еще нет, предлагаем полные префиксы
 
-            // ВАЖНО: Вычисляем АБСОЛЮТНЫЙ индекс начала замены в файле
             val absoluteStartOffset = commentStartOffset + lastAtIndex
 
             if (isEvPrefix || textAfterAt.isEmpty()) {
@@ -72,8 +71,7 @@ class ElvalCompletionContributor : CompletionContributor() {
                     .withLookupString("evl:")
                     .withTailText(" (ElVal)")
                     .bold()
-                    // Передаем абсолютный индекс!
-                    .withInsertHandler(ContextReplaceHandler(absoluteStartOffset, "@evl:")))
+                    .withInsertHandler(SimpleReplaceHandler(absoluteStartOffset, "@evl:")))
             }
 
             if (isOaPrefix || textAfterAt.isEmpty()) {
@@ -81,35 +79,22 @@ class ElvalCompletionContributor : CompletionContributor() {
                     .withLookupString("oa:")
                     .withTailText(" (OpenAPI)")
                     .bold()
-                    // Передаем абсолютный индекс!
-                    .withInsertHandler(ContextReplaceHandler(absoluteStartOffset, "@oa:")))
+                    .withInsertHandler(SimpleReplaceHandler(absoluteStartOffset, "@oa:")))
             }
+
             result.stopHere()
             return
         }
 
+        // Вычисляем абсолютный индекс начала контекста (после @evl: или @oa:) в файле
+        val absoluteContextStartOffset = commentStartOffset + prefixEndIndex
+
         // Случай 2: Мы внутри @evl: или @oa: (двоеточие уже есть)
         if (isEvPrefix) {
-            EvlCompletionProvider.fillCompletions(result, prefixEndIndex, cursorOffsetInFile, currentContext)
+            EvlCompletionProvider.fillCompletions(result, absoluteContextStartOffset, cursorOffsetInFile, currentContext)
         } else {
-            OaCompletionProvider.fillCompletions(result, cursorOffsetInFile, currentContext)
+            OaCompletionProvider.fillCompletions(result, absoluteContextStartOffset, cursorOffsetInFile, currentContext)
         }
         result.stopHere()
-    }
-
-    private class ContextReplaceHandler(private val startOffset: Int, private val replacementText: String) :
-        InsertHandler<LookupElement> {
-
-        override fun handleInsert(context: InsertionContext, item: LookupElement) {
-            val editor = context.editor
-            val currentCaretOffset = editor.caretModel.offset
-
-            // Защита от выхода за границы
-            if (startOffset < 0 || startOffset > editor.document.textLength) return
-
-            editor.document.deleteString(startOffset, currentCaretOffset)
-            editor.document.insertString(startOffset, replacementText)
-            editor.caretModel.moveToOffset(startOffset + replacementText.length)
-        }
     }
 }
