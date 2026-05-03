@@ -57,14 +57,14 @@ object OaCompletionProvider {
             val actualStartOffset = absoluteContextStartOffset + startOffsetDelta
             val hint = ElvalConstants.OA_KEYS[s]
 
-            val builder = LookupElementBuilder.create(insertText)
+            var builder = LookupElementBuilder.create(insertText)
                 .withLookupString(s)
                 .bold()
                 .withInsertHandler(SimpleReplaceHandler(actualStartOffset, insertText))
                 .withIcon(AllIcons.Nodes.Property)
 
             if (!hint.isNullOrEmpty()) {
-                builder.withTailText(" ($hint)", true)
+                builder = builder.withTailText(" ($hint)", true)
             }
 
             result.addElement(builder)

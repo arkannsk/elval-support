@@ -92,7 +92,7 @@ class ElvalCompletionContributor : CompletionContributor() {
         // Случай 2: Мы внутри @evl: или @oa: (двоеточие уже есть)
         if (isEvPrefix) {
             EvlCompletionProvider.fillCompletions(result, absoluteContextStartOffset, cursorOffsetInFile, currentContext)
-        } else {
+        } else if (isOaPrefix) {
             OaCompletionProvider.fillCompletions(result, absoluteContextStartOffset, cursorOffsetInFile, currentContext)
         }
         result.stopHere()
