@@ -24,8 +24,6 @@ Make your annotations stand out from regular comments. The plugin parses comment
 *   **Parameters:** Parameter names like `required`, `min:`, `header` are highlighted distinctly.
 *   **Values:** Values such as `"User Name"`, `email`, or `10` are highlighted as strings or numbers.
 
-<video src="screenshots/demo_hl.webm" autoplay loop muted playsinline width="400"></video>
-
 ## 📦 Installation
 
 ### Manual Installation
