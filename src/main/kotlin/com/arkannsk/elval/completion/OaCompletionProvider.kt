@@ -8,30 +8,36 @@ import com.intellij.icons.AllIcons
 object OaCompletionProvider {
 
     fun getSuggestions(rawContext: String): List<String> {
-        val hasSpace = rawContext.contains(" ")
-        val trimmed = rawContext.trim()
-        val list = mutableListOf<String>()
+        val trimmedContext = rawContext.trim()
 
-        if (trimmed.isEmpty()) {
+        if (trimmedContext.isEmpty()) {
             return ElvalConstants.OA_KEYS.keys.toList()
         }
 
-        if (!hasSpace) {
-            for ((key, _) in ElvalConstants.OA_KEYS) {
-                if (key.startsWith(trimmed)) {
-                    list.add(key)
-                }
+        // --- ОБРАБОТКА @oa:in ---
+        if (trimmedContext == "in" || trimmedContext.startsWith("in ")) {
+            val afterIn = if (trimmedContext.startsWith("in ")) {
+                trimmedContext.substring(3).trimStart() // "in ".length == 3
+            } else {
+                ""
             }
-        } else {
-            val afterKey = rawContext.substringAfter(" ").trim()
-            val commonValues = listOf("\"\"", "string", "integer", "boolean")
-            for (value in commonValues) {
-                if (value.startsWith(afterKey)) {
-                    list.add(value)
-                }
-            }
+
+            return ElvalConstants.OA_IN_VALUES.filter { it.startsWith(afterIn) }
         }
-        return list
+
+        // --- ОБРАБОТКА @oa:rewrite. ---
+        if (trimmedContext.startsWith("rewrite.")) {
+            val afterRewrite = trimmedContext.substring(8).trimStart()
+            if ("type".startsWith(afterRewrite)) {
+                return listOf("type")
+            }
+            return emptyList()
+        }
+
+        // --- ОБЫЧНЫЕ КЛЮЧИ OA ---
+        return ElvalConstants.OA_KEYS.keys.filter {
+            it.startsWith(trimmedContext) && it != "in"
+        }
     }
 
     fun fillCompletions(
@@ -41,21 +47,30 @@ object OaCompletionProvider {
         rawContext: String
     ) {
         val suggestions = getSuggestions(rawContext)
-        val hasSpace = rawContext.contains(" ")
+
+        val isInValueContext = rawContext.trim().let {
+            it == "in" || it.startsWith("in ")
+        }
 
         for (s in suggestions) {
-            val insertText = if (!hasSpace) "$s " else s
+            var insertText = s
 
-            var startOffsetDelta = 0
-            if (hasSpace) {
-                val lastSpaceIndex = rawContext.lastIndexOf(' ')
-                if (lastSpaceIndex != -1) {
-                    startOffsetDelta = lastSpaceIndex + 1
-                }
+            // Добавляем пробел, если это значение для 'in' или обычный ключ
+            if (isInValueContext || (!s.endsWith(":") && !s.endsWith("."))) {
+                insertText += " "
             }
 
+            // Рассчитываем смещение начала замены (исправляем ошибку с переменной)
+            val lastSpaceIndex = rawContext.lastIndexOf(' ')
+            val startOffsetDelta = if (lastSpaceIndex != -1) lastSpaceIndex + 1 else 0
+
             val actualStartOffset = absoluteContextStartOffset + startOffsetDelta
-            val hint = ElvalConstants.OA_KEYS[s]
+
+            val hint = if (isInValueContext) {
+                "Location for parameter"
+            } else {
+                ElvalConstants.OA_KEYS[s]
+            }
 
             var builder = LookupElementBuilder.create(insertText)
                 .withLookupString(s)

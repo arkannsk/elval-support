@@ -54,10 +54,11 @@ object ElvalConstants {
     )
 
     val OA_KEYS = mapOf(
+        "in" to "Parameter location (path, query, header, cookie)",
         "title" to "Schema title",
         "description" to "Schema description",
         "example" to "Example value",
-        "format" to "OpenAPI format (email, uuid, date-time)",
+        "format" to "OpenAPI format (email, uuid, date-time, etc.)",
         "default" to "Default value",
         "enum" to "Allowed values",
         "minimum" to "Min value (numeric)",
@@ -65,8 +66,10 @@ object ElvalConstants {
         "minLength" to "Min length (string)",
         "maxLength" to "Max length (string)",
         "pattern" to "Regex pattern",
-        "discriminator" to "Discriminator field for polymorphism",
-        "oneOf" to "OneOf schema reference",
-        "rewrite.type" to "Rewrite type for docs"
+        "discriminator" to "Discriminator field name",
+        "rewrite.type" to "Override type for OpenAPI docs"
     )
+
+    // Возможные значения для @oa:in
+    val OA_IN_VALUES = listOf("path", "query", "header", "cookie")
 }
